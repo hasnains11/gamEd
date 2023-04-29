@@ -1,0 +1,44 @@
+import 'package:flutter/material.dart';
+
+class BottomNavBar extends StatefulWidget {
+  final int selectedIndex;
+  final Function(int) onItemTapped;
+
+  BottomNavBar({required this.selectedIndex, required this.onItemTapped});
+
+  @override
+  _BottomNavBarState createState() => _BottomNavBarState();
+}
+
+class _BottomNavBarState extends State<BottomNavBar> {
+  @override
+  Widget build(BuildContext context) {
+    return BottomNavigationBar(
+      type: BottomNavigationBarType.fixed,
+      backgroundColor: Colors.white,
+      selectedItemColor: Colors.blue,
+      unselectedItemColor: Colors.grey,
+      selectedFontSize: 13,
+      currentIndex: widget.selectedIndex,
+      onTap: widget.onItemTapped,
+      items: [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.dashboard),
+          label: 'Dashboard',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.announcement),
+          label: 'Announcement',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.leaderboard),
+          label: 'Leaderboard',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.person),
+          label: 'Profile',
+        ),
+      ],
+    );
+  }
+}

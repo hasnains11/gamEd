@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "987290427539",
+    "project_id": "gamed-680c3",
+    "storage_bucket": "gamed-680c3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:987290427539:android:b85b4401a8f9d9a6096d66",
+        "android_client_info": {
+          "package_name": "com.example.gamed"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "987290427539-n50psaf3uc57h1de3j6rc7h3ctid4pdt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4CtWFjiEfPdA-hPdl7UEqv-k2y5Pi3nI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "987290427539-n50psaf3uc57h1de3j6rc7h3ctid4pdt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

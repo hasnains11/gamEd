@@ -14,7 +14,7 @@ class ClassroomController extends GetxController {
   }
 
   void loadClassrooms() async {
-    final userId = FirebaseAuth.instance.currentUser!.uid;
+    // final userId = FirebaseAuth.instance.currentUser!.uid;
     final useremail = FirebaseAuth.instance.currentUser!.email;
     // await FirebaseFirestore.instance
     //     .collection('classrooms')
@@ -24,19 +24,29 @@ class ClassroomController extends GetxController {
     //       .map((doc) => Classroom.fromDocumentSnapshot(doc))
     //       .toList();
     // });
-    var result =
-        await FirebaseFirestore.instance.collection('classrooms').get();
+    // var result =
+    //     await FirebaseFirestore.instance.collection('classrooms').get();
+    var result = await FirebaseFirestore.instance
+        .collection('classrooms')
+        .where('students', arrayContains: useremail)
+        .get();
 
     print(result.docs.length);
+    print(FirebaseAuth.instance.currentUser?.email);
+    print(result.toString());
+
     classrooms.value = result.docs.map((element) {
       var data = element.data();
       return (Classroom(
           name: data['name'],
           teacher: data['teacher'],
-          students: List<String>.of(data['students'])));
+          students:[]));
       // print(element.data());
     }).toList();
 
+    print(classrooms.value);
+
     print('classrooms loaded');
+
   }
 }

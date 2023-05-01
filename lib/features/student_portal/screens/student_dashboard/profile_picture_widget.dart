@@ -50,27 +50,15 @@ class _ProfilePictureWidgetState extends State<ProfilePictureWidget> {
         }
         final data = snapshot.data!.data() as Map<String, dynamic>;
         final profilePictureUrl = data['profilePictureUrl'];
-        return Column(
-          children: [
-            GestureDetector(
-              onTap: _getImage,
-              child: CircleAvatar(
-                radius: 50,
-                backgroundImage: profilePictureUrl != null
-                    ? NetworkImage(profilePictureUrl)
-                    : null,
-                child: profilePictureUrl == null ? Icon(Icons.person) : null,
-              ),
-            ),
-            SizedBox(height: 16),
-            Text(
-              'Tap to select a profile picture',
-              style: TextStyle(
-                color: Colors.grey[600],
-                fontSize: 16,
-              ),
-            ),
-          ],
+        return GestureDetector(
+          onTap: _getImage,
+          child: CircleAvatar(
+            radius: 50,
+            backgroundImage: profilePictureUrl != null
+                ? NetworkImage(profilePictureUrl)
+                : null,
+            child: profilePictureUrl == null ? Icon(Icons.person) : null,
+          ),
         );
       },
     );

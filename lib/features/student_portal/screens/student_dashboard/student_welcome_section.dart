@@ -16,32 +16,48 @@ class StudentWelcomeSection extends StatelessWidget {
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: Column(
+
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ProfilePictureWidget(userId: "as@gmal.com"),
+          SizedBox(height: 10,),
+          Text("Student Dashboard",
+          style: TextStyle(
+              fontSize: 15
+
+          ),
+
+            textAlign: TextAlign.center,),
+          SizedBox(height: 14,),
+          Text("Welcome,",
+          style: TextStyle(
+            fontSize: 22,
+          ),),
+          SizedBox(height: 7,),
+
+
+          Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [ProfilePictureWidget(userId: "as@gmal.com"),
+            SizedBox(width: 13  ,),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                SizedBox(height:14.0),
+                Text(
+                  name,
+                  style: TextStyle(
+                    fontSize: 17.0,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ]),
           Row(
             children: [
               SizedBox(width: 16.0),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Welcome,",
-                    style: TextStyle(
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 8.0),
-                  Text(
-                    name,
-                    style: TextStyle(
-                      fontSize: 24.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
+
             ],
           ),
           SizedBox(height: 16.0),

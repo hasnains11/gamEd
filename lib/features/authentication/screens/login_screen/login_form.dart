@@ -59,16 +59,24 @@ class LoginForm extends StatelessWidget {
                     border: OutlineInputBorder()),
               ),
               const SizedBox(height: tFormHeight - 20),
-              TextFormField(
-                controller: loginController.password,
-                decoration: const InputDecoration(
-                  prefixIcon: Icon(Icons.fingerprint),
-                  labelText: tPassword,
-                  hintText: tPassword,
-                  border: OutlineInputBorder(),
-                  suffixIcon: IconButton(
-                    onPressed: null,
-                    icon: Icon(Icons.remove_red_eye_sharp),
+              Obx(
+                ()=> TextFormField(
+                  obscureText: loginController.obscureText.value,
+                  controller: loginController.password,
+                  decoration: InputDecoration(
+                    prefixIcon: Icon(Icons.fingerprint),
+                    labelText: tPassword,
+                    hintText: tPassword,
+                    border: OutlineInputBorder(),
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        loginController.obscureText.value=
+                            !loginController.obscureText.value;
+                      },
+                      icon: Icon(loginController.obscureText.value?
+                      Icons.remove_red_eye_sharp:
+                      Icons.remove_red_eye_outlined),
+                    ),
                   ),
                 ),
               ),

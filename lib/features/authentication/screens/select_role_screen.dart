@@ -36,7 +36,7 @@ class RoleSelectionScreen extends StatelessWidget {
 
         var role = data['role'].toString().toLowerCase().trim();
         if (data.containsKey('role') && role == "student") {
-          return const IndexPage();
+          return  IndexPage();
         } else if (data.containsKey('role') && role == "teacher") {
           return Text("Teacher");
         } else if (data.containsKey('role') && role == "recruiter") {

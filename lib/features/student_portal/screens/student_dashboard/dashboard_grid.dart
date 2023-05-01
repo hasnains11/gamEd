@@ -52,7 +52,7 @@ class DashboardGridItem extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.only(left: 3,right: 3),
         decoration: BoxDecoration(
-          color: color.withOpacity(0.5),
+          color: color.withOpacity(0.9),
           borderRadius: BorderRadius.circular(8),
           boxShadow: [
             BoxShadow(

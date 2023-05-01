@@ -6,6 +6,7 @@ import '../../../repositories/authentication_repository/authentication_repositor
 class LoginController extends GetxController {
   var a = Get.put(AuthenticationRepository());
   static LoginController get instance => Get.find();
+  RxBool obscureText = true.obs;
 
   /// TextField Controllers to get data from TextFields
   final email = TextEditingController();

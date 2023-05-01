@@ -24,7 +24,8 @@ class StudentDashboard extends StatelessWidget {
         color: Color(0xffF8B195),
         onPressed: () {
           // TODO: Implement action for View Classrooms item
-          Get.to(() => ClassroomScreen());
+          // Get.to(() => ClassroomScreen());
+          studentController.selectedIndex.value=6;
         },
       ),
       DashboardGridItem(
@@ -41,6 +42,8 @@ class StudentDashboard extends StatelessWidget {
         color: Color(0xffC06C84),
         onPressed: () {
           // TODO: Implement action for Progress item
+          studentController.selectedIndex.value=5;
+
         },
       ),
       DashboardGridItem(
@@ -49,30 +52,31 @@ class StudentDashboard extends StatelessWidget {
         color: Color(0xff6C5B7B),
         onPressed: () {
           // TODO: Implement action for Achievements item
+          studentController.selectedIndex.value=4;
         },
       ),
     ];
 
     return Scaffold(
-
-        bottomNavigationBar: Obx(
-          () => BottomNavBar(
-            selectedIndex: studentController.selectedIndex.value,
-            onItemTapped: (index) {
-              studentController.selectedIndex.value = index;
-              switch(index){
-                case 0:
-                  Get.toNamed('/student/dashboard');
-                  break;
-                case 1:
-                  Get.toNamed("/student/announcements");
-                  break;
-                  default:
-                    break;
-              }
-              },
-          ),
-        ),
+        //
+        // bottomNavigationBar: Obx(
+        //   () => BottomNavBar(
+        //     selectedIndex: studentController.selectedIndex.value,
+        //     onItemTapped: (index) {
+        //       studentController.selectedIndex.value = index;
+        //       switch(index){
+        //         case 0:
+        //           Get.toNamed('/student/dashboard');
+        //           break;
+        //         case 1:
+        //           Get.toNamed("/student/announcements");
+        //           break;
+        //           default:
+        //             break;
+        //       }
+        //       },
+        //   ),
+        // ),
         body: SingleChildScrollView(
           child: Container(
             child: Column(

@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 
 import '../../student_portal/screens/index.dart';
 import '../../student_portal/screens/student_dashboard/student_dashboard.dart';
+import '../../teacher_portal/screens/teacher_dashboard.dart';
 
 class RoleSelectionScreen extends StatelessWidget {
   RoleSelectionScreen({Key? key}) : super(key: key);
@@ -17,15 +18,25 @@ class RoleSelectionScreen extends StatelessWidget {
     return StreamBuilder<DocumentSnapshot>(
       stream: FirebaseFirestore.instance
           .collection('users')
-          .doc(auth.firebaseUser.value?.email??"fakeemail.com")
+          .doc(auth.firebaseUser.value?.email??"fakeEmail@gmal.com")
           .snapshots(),
       builder: (context, snapshot) {
+        print(auth.firebaseUser.value?.email);
+        AuthenticationRepository.instance.setCurrentUser(snapshot.data?.data());
+        print(snapshot.data?.data());
         if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         }
 
         if (snapshot.data == null || snapshot.data!.data() == null) {
-          return WelcomeScreen();
+          if(auth.firebaseUser.value == null){
+            return WelcomeScreen();
+          }
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+
+
         }else{
         // print(auth.firebaseUser.value!.email);
         // print(snapshot.data!.data().toString());
@@ -38,7 +49,7 @@ class RoleSelectionScreen extends StatelessWidget {
         if (data.containsKey('role') && role == "student") {
           return  IndexPage();
         } else if (data.containsKey('role') && role == "teacher") {
-          return Text("Teacher");
+          return TeacherDashboardScreen();
         } else if (data.containsKey('role') && role == "recruiter") {
           return Text("Recruiter");
         }

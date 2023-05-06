@@ -13,6 +13,7 @@ class AuthenticationRepository extends GetxController {
   //Variables
   final _auth = FirebaseAuth.instance;
   late final Rx<User?> firebaseUser;
+  var currentUser;
   //Will be load when app launches this func will be called and set the firebaseUser state
   @override
   void onReady() {
@@ -21,11 +22,17 @@ class AuthenticationRepository extends GetxController {
     ever(firebaseUser, _setInitialScreen);
   }
 
+  void setCurrentUser(user){
+    currentUser = user;
+  }
+   getCurrentUser(){
+    return currentUser;
+  }
+
   /// If we are setting initial screen from here
   /// then in the main.dart => App() add CircularProgressIndicator()
   _setInitialScreen(User? user) {
     Get.offAll(() => RoleSelectionScreen());
-
   }
 
   //FUNC

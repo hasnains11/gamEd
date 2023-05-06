@@ -10,7 +10,7 @@ class StudentWelcomeSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(16.0),
+      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 2),
       decoration: BoxDecoration(
         color: Colors.blueGrey[50],
         borderRadius: BorderRadius.circular(8.0),
@@ -20,13 +20,13 @@ class StudentWelcomeSection extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: 10,),
-          Text("Student Dashboard",
-          style: TextStyle(
-              fontSize: 15
-
-          ),
-
-            textAlign: TextAlign.center,),
+          // Text("Student Dashboard",
+          // style: TextStyle(
+          //     fontSize: 15
+          //
+          // ),
+          //
+          //   textAlign: TextAlign.center,),
           SizedBox(height: 14,),
           Text("Welcome,",
           style: TextStyle(

@@ -23,8 +23,8 @@ class DashboardGrid extends StatelessWidget {
           crossAxisCount: 2,
           padding: EdgeInsets.all(16),
           childAspectRatio: 1.2,
-          crossAxisSpacing: 16,
-          mainAxisSpacing: 16,
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
           children: items,
         ),
       ),
@@ -68,7 +68,7 @@ class DashboardGridItem extends StatelessWidget {
           children: [
             Icon(
               icon,
-              size: 45,
+              size: 35,
               color: Colors.white,
             ),
             SizedBox(height: 13),

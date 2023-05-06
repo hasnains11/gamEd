@@ -64,6 +64,24 @@ class _IndexPageState extends State<IndexPage> {
           // }
             },
           selectedIndex: _studentController.selectedIndex.value>3 ?0 : _studentController.selectedIndex.value,
+           items:[
+             BottomNavigationBarItem(
+               icon: Icon(Icons.dashboard),
+               label: 'Dashboard',
+             ),
+             BottomNavigationBarItem(
+               icon: Icon(Icons.announcement),
+               label: 'Announcement',
+             ),
+             BottomNavigationBarItem(
+               icon: Icon(Icons.leaderboard),
+               label: 'Leaderboard',
+             ),
+             BottomNavigationBarItem(
+               icon: Icon(Icons.person),
+               label: 'Profile',
+             ),
+           ]
 
          ),
       ),

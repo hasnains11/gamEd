@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 
 import '../../controllers/StudentController.dart';
 import '../bottom_navbar.dart';
+import 'badges_section.dart';
 import 'dashboard_grid.dart';
 
 class StudentDashboard extends StatelessWidget {
@@ -83,11 +84,12 @@ class StudentDashboard extends StatelessWidget {
               children: [
                 StudentWelcomeSection(name: "Hasnain", imageUrl: "asdf"),
                 SizedBox(
-                  height: 400,
+                  height: 300,
                   child: DashboardGrid(
                     items: items,
                   ),
-                )
+                ),
+                BadgeSection(badgesEarned: [1]),
               ],
             ),
           ),

@@ -6,6 +6,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gamed/repositories/authentication_repository/authentication_repository.dart';
 import 'package:get/get.dart';
 
+import 'complete_profile_screen.dart';
+
 class ProfileScreen extends StatefulWidget {
 
   ProfileScreen();
@@ -77,6 +79,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   void _onCompleteProfilePressed() {
     // TODO: Navigate to the complete profile screen
+    Get.to(() => CompleteProfileScreen());
   }
 
   Widget _buildCompleteProfileButton() {
@@ -84,7 +87,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       return Padding(
         padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
         child: ElevatedButton(
-          onPressed: _loadUserData,
+          onPressed: _onCompleteProfilePressed,
           child: Text('Complete Profile'),
         ),
       );

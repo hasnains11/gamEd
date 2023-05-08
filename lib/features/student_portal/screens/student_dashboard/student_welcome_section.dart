@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gamed/features/student_portal/screens/student_dashboard/profile_picture_widget.dart';
 
+import '../../../../repositories/authentication_repository/authentication_repository.dart';
+
 class StudentWelcomeSection extends StatelessWidget {
   final String name;
   final String imageUrl;
@@ -37,7 +39,7 @@ class StudentWelcomeSection extends StatelessWidget {
 
           Row(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [ProfilePictureWidget(userId: "as@gmal.com"),
+              children: [ProfilePictureWidget(userId: AuthenticationRepository.instance.firebaseUser.value?.email??"",),
             SizedBox(width: 13  ,),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,

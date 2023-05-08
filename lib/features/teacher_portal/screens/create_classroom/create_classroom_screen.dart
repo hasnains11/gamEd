@@ -4,6 +4,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gamed/repositories/authentication_repository/authentication_repository.dart';
 import 'package:get/get.dart';
 
+import '../../../student_portal/screens/bottom_navbar.dart';
+import '../../../student_portal/screens/leaderboard_screen/leaderboard_screen.dart';
+import '../create_announcements/create_announcement_screen.dart';
+import '../teacher_dashboard.dart';
+
 class CreateClassroomScreen extends StatefulWidget {
   @override
   _CreateClassroomScreenState createState() => _CreateClassroomScreenState();
@@ -13,8 +18,7 @@ class _CreateClassroomScreenState extends State<CreateClassroomScreen> {
   TextEditingController _classNameController = TextEditingController();
   TextEditingController _joiningCodeController = TextEditingController();
 
-  List<String> _selectedStudents = [];
-
+  List<Map<String ,dynamic>> _selectedStudents = [];
   @override
   void dispose() {
     _classNameController.dispose();
@@ -27,6 +31,40 @@ class _CreateClassroomScreenState extends State<CreateClassroomScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Create Classroom'),
+      ),
+      bottomNavigationBar:  BottomNavBar(
+
+        selectedIndex: 0,
+        onItemTapped: (index){
+          if(index==0){
+            Get.off(()=>TeacherDashboardScreen());
+          }
+          else if(index==1){
+            Get.off(()=>CreateAnnouncementScreen());
+          }
+          else if(index==2){
+            Get.off(()=>LeaderboardScreen(selectedindex:2,));
+          }
+          else if(index==3){
+            // Get.to(()=>ProfilePictureWidget());
+          }
+        },
+        items: [ BottomNavigationBarItem(
+          icon: Icon(Icons.dashboard),
+          label: 'Classroom',
+        ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.announcement),
+            label: 'Announcement',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.leaderboard),
+            label: "Leaderboard",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),],
       ),
       body: Container(
         padding: EdgeInsets.all(16.0),
@@ -70,7 +108,7 @@ class _CreateClassroomScreenState extends State<CreateClassroomScreen> {
                   itemCount: _selectedStudents.length,
                   itemBuilder: (context, index) {
                     return ListTile(
-                      title: Text(_selectedStudents[index]),
+                      title: Text(_selectedStudents[index]['userData']['fullName']),
                       trailing: IconButton(
                         icon: Icon(Icons.remove),
                         onPressed: () {
@@ -124,7 +162,7 @@ class _CreateClassroomScreenState extends State<CreateClassroomScreen> {
   }
 
   Future<void> _showAddStudentsDialog() async {
-    List<String> students = await _fetchStudents();
+    List<Map<String,dynamic>> students = await _fetchStudents();
 
     showDialog(
       context: context,
@@ -139,7 +177,7 @@ class _CreateClassroomScreenState extends State<CreateClassroomScreen> {
                   itemCount: students.length,
                   itemBuilder: (context, index) {
                     return CheckboxListTile(
-                      title: Text(students[index]),
+                      title: Text(students[index]['userData']['fullName']),
                       value: _selectedStudents.contains(students[index]),
                       onChanged: (value) {
                         setState(() {
@@ -169,8 +207,8 @@ class _CreateClassroomScreenState extends State<CreateClassroomScreen> {
     );
   }
 
-  Future<List<String>> _fetchStudents() async {
-    List<String> students = [];
+  Future<List<Map<String,dynamic>>> _fetchStudents() async {
+    List<Map<String,dynamic>> students = [];
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('users')
         .where('role', isEqualTo: 'student')
@@ -178,13 +216,14 @@ class _CreateClassroomScreenState extends State<CreateClassroomScreen> {
 
     if (querySnapshot.docs.isNotEmpty) {
       querySnapshot.docs.forEach((doc) {
-        String studentName = doc.get('userData')['fullName'];
+        var studentName = doc.data() as Map<String,dynamic>;
         students.add(studentName);
       });
     }
 
     return students;
   }
+
   Future<String> generateUniqueJoiningCode() async {
     CollectionReference classroomsRef = FirebaseFirestore.instance.collection('classrooms');
     String joiningCode="";
@@ -219,6 +258,8 @@ class _CreateClassroomScreenState extends State<CreateClassroomScreen> {
      var joiningCode =await generateUniqueJoiningCode();
     _joiningCodeController.text = joiningCode;
   }
+
+
   void _createClassroom() async {
     String classroomName = _classNameController.text;
     String joiningCode = _joiningCodeController.text;

@@ -2,12 +2,54 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
+import '../../../student_portal/screens/bottom_navbar.dart';
+import '../../../student_portal/screens/leaderboard_screen/leaderboard_screen.dart';
+import '../create_announcements/create_announcement_screen.dart';
+import '../teacher_dashboard.dart';
+import 'classroom_details.dart';
+
 class ViewClassroomScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('View Classrooms'),
+      ),
+      bottomNavigationBar:  BottomNavBar(
+
+        selectedIndex: 1,
+        onItemTapped: (index){
+          if(index==0){
+            Get.off(()=>TeacherDashboardScreen());
+          }
+          else if(index==1){
+            Get.off(()=>CreateAnnouncementScreen());
+          }
+          else if(index==2){
+
+            Get.off(()=>LeaderboardScreen(selectedindex:2,));
+
+          }
+          else if(index==3){
+            // Get.to(()=>ProfilePictureWidget());
+          }
+        },
+        items: [ BottomNavigationBarItem(
+          icon: Icon(Icons.dashboard),
+          label: 'Classroom',
+        ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.announcement),
+            label: 'Announcement',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.leaderboard),
+            label: "Leaderboard",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),],
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('classrooms').snapshots(),
@@ -36,6 +78,14 @@ class ViewClassroomScreen extends StatelessWidget {
                         String joiningCode = classroom['joiningCode']??"";
                         return Card(
                           child: ListTile(
+                            onTap: (){
+                              Get.to(()=>ClassroomDetailsScreen(
+                                classroomId: classroom.id,
+                                className: name,
+                                classCode: joiningCode,
+                                teacherName: "Teacher Name",
+                              ));
+                            },
                             title: Text(
                               name,
                               style: TextStyle(

@@ -2,11 +2,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../repositories/authentication_repository/authentication_repository.dart';
 import '../../controllers/ClassroomController.dart';
 import '../../model/Classroom.dart';
+import 'classroom_details.dart';
+import 'joinClasroomDialog.dart';
 
 class ClassroomScreen extends StatelessWidget {
   final classroomController = Get.put(ClassroomController());
+
+
+
+  
+  
+  
 
   @override
   Widget build(BuildContext context) {
@@ -22,18 +31,12 @@ class ClassroomScreen extends StatelessWidget {
               return Padding(
                 padding: EdgeInsets.all(16),
                 child: Card(
-                  child: InkWell(
-                    onTap: () {},
+                  margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: Padding(
+                    padding: EdgeInsets.all(16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Image.network(
-                          'https://picsum.photos/200/300',
-                          height: 120,
-                          width: double.infinity,
-                          fit: BoxFit.cover,
-                        ),
-                        SizedBox(height: 16),
                         Text(
                           classroom.name,
                           style: TextStyle(
@@ -43,18 +46,39 @@ class ClassroomScreen extends StatelessWidget {
                         ),
                         SizedBox(height: 8),
                         Text(
-                          classroom.teacher,
-                          style: TextStyle(fontSize: 16),
+                          'Teacher: ${classroom.teacherName}',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey[700],
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          'Joining Code: ${classroom.joiningCode}',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey[700],
+                          ),
                         ),
                         SizedBox(height: 8),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Icon(Icons.calendar_today,
-                                size: 16, color: Colors.grey[600]),
-                            SizedBox(width: 4),
                             Text(
-                              'Due Date',
-                              style: TextStyle(fontSize: 16),
+                              'Students: ${classroom.students.length}',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey[700],
+                              ),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                // Handle join classroom action
+                                Get.to(() => ClassroomDetails(
+                                      classroom: classroom,
+                                    ));
+                              },
+                              child: Text('Start'),
                             ),
                           ],
                         ),
@@ -67,15 +91,26 @@ class ClassroomScreen extends StatelessWidget {
           )),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          print("button pressed");
 
+          showJoinClassroomDialog(context);
           print("dione");
           // TODO: Implement join classroom functionality
-          classroomController.loadClassrooms();
-          print(classroomController.classrooms.value.toString());
+          // classroomController.loadClassrooms();
+          // print(classroomController.classrooms.value.toString());
         },
         child: Icon(Icons.add),
       ),
     );
+
+
   }
+  void showJoinClassroomDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return JoinClassroomDialog();
+      },
+    );
+  }
+
 }

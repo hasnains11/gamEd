@@ -1,10 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gamed/features/student_portal/screens/bottom_navbar.dart';
+import 'package:gamed/features/student_portal/screens/student_dashboard/profile_picture_widget.dart';
 import 'package:gamed/repositories/authentication_repository/authentication_repository.dart';
 import 'package:get/get.dart';
 
 import '../../../firestore_services.dart';
+import '../../student_portal/screens/leaderboard_screen/leaderboard_screen.dart';
+import '../../student_portal/screens/user_profile/student_profile.dart';
+import '../teacher_profile/teacher_profile.dart';
+import 'create_announcements/create_announcement_screen.dart';
 import 'create_classroom/create_classroom_screen.dart';
 import 'view_classrooms/view_classrooms.dart';
 
@@ -43,6 +48,19 @@ class TeacherDashboardScreen extends StatelessWidget {
 
         selectedIndex: 0,
         onItemTapped: (index){
+          if(index==0){
+            Get.off(()=>TeacherDashboardScreen());
+          }
+          else if(index==1){
+            Get.off(()=>CreateAnnouncementScreen());
+          }
+          else if(index==2){
+            Get.off(()=>LeaderboardScreen(selectedindex:2,));
+          }
+          else if(index==3){
+            Get.to(()=> TeacherProfileScreen());
+            // Get.to(()=>ProfilePictureWidget());
+          }
         },
         items: [ BottomNavigationBarItem(
           icon: Icon(Icons.dashboard),
@@ -66,14 +84,14 @@ class TeacherDashboardScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            _buildGreetingSection("img",currentUser['userData']['fullName']),
+            _buildGreetingSection(currentUser['email'],currentUser['userData']['fullName']),
             SizedBox(height: 16.0),
             _buildFeatureCard(
               icon: Icons.class_,
               title: 'Create Classroom',
               onTap: () {
                 // Handle create classroom action
-                Get.to(()=>CreateClassroomScreen());
+                Get.off(()=>CreateClassroomScreen());
               },
             ),
             SizedBox(height: 16.0),
@@ -82,7 +100,7 @@ class TeacherDashboardScreen extends StatelessWidget {
               title: 'View Classrooms',
               onTap: () {
                 // Handle view classrooms action
-              Get.to(()=>ViewClassroomScreen() );
+              Get.off(()=>ViewClassroomScreen() );
 
               },
             ),
@@ -92,13 +110,16 @@ class TeacherDashboardScreen extends StatelessWidget {
               title: 'View Leaderboard',
               onTap: () {
                 // Handle view leaderboard action
+                Get.off(()=>LeaderboardScreen(selectedindex: 2,));
               },
             ),
-            SizedBox(height: 16.0),
+
+              SizedBox(height: 16.0),
             _buildFeatureCard(
               icon: Icons.announcement,
               title: 'Create Announcement',
               onTap: () {
+                Get.off(()=>CreateAnnouncementScreen());
                 // Handle create announcement action
               },
             ),
@@ -148,14 +169,15 @@ class TeacherDashboardScreen extends StatelessWidget {
 
 
 
-Widget _buildGreetingSection(String imageAddress, String name) {
+Widget _buildGreetingSection(String userEmail, String name) {
   return Row(
     crossAxisAlignment: CrossAxisAlignment.center,
     children: [
-      CircleAvatar(
-        radius: 40.0,
-        backgroundImage: AssetImage(imageAddress),
-      ),
+      ProfilePictureWidget(userId:userEmail),
+      // CircleAvatar(
+      //   radius: 40.0,
+      //   backgroundImage: AssetImage(imageAddress),
+      // ),
       SizedBox(width: 16.0),
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,

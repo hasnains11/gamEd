@@ -1,18 +1,18 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class Classroom {
-  String name;
-  String teacher;
-  List<String> students;
+  final String joiningCode;
+  final String name;
+  final List<Map<String, dynamic>> students;
+  final String teacherEmail;
+  final String teacherName;
+  final String id;
 
-  Classroom(
-      {required this.name, required this.teacher, required this.students});
+  Classroom({
+    required this.id,
+    required this.joiningCode,
+    required this.name,
+    required this.students,
+    required this.teacherEmail,
+    required this.teacherName,
+  });
 
-  // factory Classroom.fromDocumentSnapshot(DocumentSnapshot doc) {
-  //   return Classroom(
-  //     id: doc.id,
-  //     name: doc['name'],
-  //     description: doc['description'],
-  //   );
-  // }
 }

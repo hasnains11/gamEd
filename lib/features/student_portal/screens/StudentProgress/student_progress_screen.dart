@@ -11,17 +11,17 @@ class StudentProgressScreen extends StatefulWidget {
 class _StudentProgressScreenState extends State<StudentProgressScreen> {
   final List<Course> _courses = [
     Course(
-        name: 'Mathematics',
+        name: 'Programming Fundamentals',
         progress: 75,
         assignmentsCompleted: 10,
         totalAssignments: 15),
     Course(
-        name: 'Physics',
+        name: 'Javascript',
         progress: 60,
         assignmentsCompleted: 8,
         totalAssignments: 12),
     Course(
-        name: 'Chemistry',
+        name: 'C#',
         progress: 90,
         assignmentsCompleted: 12,
         totalAssignments: 12),
@@ -38,7 +38,7 @@ class _StudentProgressScreenState extends State<StudentProgressScreen> {
         itemBuilder: (BuildContext context, int index) {
           final course = _courses[index];
           return Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(10.0),
             child: Card(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -47,9 +47,11 @@ class _StudentProgressScreenState extends State<StudentProgressScreen> {
                   children: [
                     Text(
                       course.name,
-                      style: const TextStyle(fontSize: 20),
+                      style: const
+                      TextStyle(fontSize: 18,
+                        fontWeight: FontWeight.bold,),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 5),
 
                     Row(
                       children: [

@@ -13,10 +13,6 @@ class ClassroomScreen extends StatelessWidget {
 
 
 
-  
-  
-  
-
   @override
   Widget build(BuildContext context) {
     print(classroomController.classrooms.value.toString());

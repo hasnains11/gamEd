@@ -17,18 +17,52 @@ class ClassroomController extends GetxController {
 
 
 
-  Future<bool> isUserJoined(String userEmail) async {
+  Future<bool> isUserJoined(String joiningCode) async {
     try {
-      final classroomsCollection = FirebaseFirestore.instance.collection('classrooms');
-
-      final classroomsQuerySnapshot = await classroomsCollection.where('students', arrayContains: {'email': userEmail}).get();
-
-      return classroomsQuerySnapshot.docs.isNotEmpty;
+      // Check if the joining code exists in the classrooms list
+      bool isJoined = classrooms.any((classroom) => classroom.joiningCode == joiningCode);
+      return isJoined;
     } catch (error) {
       print('Error checking user joined status: $error');
       return false;
     }
   }
+
+
+  Future<void> leaveClassroom(String classroomId) async {
+    try {
+      final currentUserEmail = FirebaseAuth.instance.currentUser!.email!;
+
+      // Fetch the classroom document
+      final classroomDoc = FirebaseFirestore.instance.collection('classrooms').doc(classroomId);
+
+      // Fetch the current student list from the classroom document
+      final classroomSnapshot = await classroomDoc.get();
+      final students = List<Map<String, dynamic>>.from(classroomSnapshot.data()?['students']);
+
+      // Filter out the current user from the student list
+      final updatedStudents = students.where((student) => student['email'] != currentUserEmail).toList();
+
+      // Update the classroom document with the updated student list
+      await classroomDoc.set({
+        'students': updatedStudents,
+      }, SetOptions(merge: true));
+
+      Get.rawSnackbar(
+        snackStyle: SnackStyle.FLOATING,
+        message: 'Successfully left the classroom!',
+        margin: EdgeInsets.all(16),
+      );
+
+      // Reload the classrooms after leaving
+      loadClassrooms();
+
+      print('Successfully left the classroom!');
+    } catch (error) {
+      print('Error leaving the classroom: $error');
+    }
+  }
+
 
 
 
@@ -41,7 +75,7 @@ class ClassroomController extends GetxController {
       final currentUser = AuthenticationRepository.instance.currentUser! as Map<String, dynamic>;
       final String? userEmail = FirebaseAuth.instance.currentUser!.email ;
     print("ASDFSA $userEmail");
-     bool alreadyJoined=await isUserJoined(userEmail??"");
+     bool alreadyJoined= await isUserJoined(joiningCode??"");
      print("ASDFSA $alreadyJoined");
      // Fetch the classroom document based on the joining code
      if(alreadyJoined==true){

@@ -2,10 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../controllers/ClassroomController.dart';
 import '../../model/Classroom.dart';
 
 class ClassroomDetails extends StatefulWidget {
   final Classroom classroom;
+  final classroomController = Get.put(ClassroomController());
 
   ClassroomDetails({required this.classroom});
 
@@ -15,7 +17,6 @@ class ClassroomDetails extends StatefulWidget {
 
 class _ClassroomDetailsState extends State<ClassroomDetails> {
   late List<Announcement> announcements=[];
-
   @override
   void initState() {
     super.initState();
@@ -56,6 +57,21 @@ class _ClassroomDetailsState extends State<ClassroomDetails> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.classroom.name),
+        actions: [
+          ElevatedButton(
+            onPressed: () async {
+              // Call the leaveClassroom function here
+              await widget.classroomController.leaveClassroom(widget.classroom.id);
+              Navigator.pop(context);
+              },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.white,
+            ),
+            child: Text('Leave Classroom'),
+          )
+
+        ],
       ),
       body: ListView(
         children: [
@@ -185,7 +201,7 @@ class _ClassroomDetailsState extends State<ClassroomDetails> {
           leading: CircleAvatar(
             // Add the student's profile picture here
             backgroundImage: NetworkImage(
-              widget.classroom.students[index]['profilePictureUrl'],
+              widget.classroom.students[index]['profilePictureUrl']??"",
             ),
           ),
           title: Text(studentName),

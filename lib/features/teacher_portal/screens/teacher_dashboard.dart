@@ -55,7 +55,7 @@ class TeacherDashboardScreen extends StatelessWidget {
             Get.off(()=>CreateAnnouncementScreen());
           }
           else if(index==2){
-            Get.off(()=>LeaderboardScreen(selectedindex:2,));
+            Get.to(()=>LeaderboardScreen(selectedindex:2,));
           }
           else if(index==3){
             Get.to(()=> TeacherProfileScreen());
@@ -110,7 +110,7 @@ class TeacherDashboardScreen extends StatelessWidget {
               title: 'View Leaderboard',
               onTap: () {
                 // Handle view leaderboard action
-                Get.off(()=>LeaderboardScreen(selectedindex: 2,));
+                Get.to(()=>LeaderboardScreen(selectedindex: 2,));
               },
             ),
 

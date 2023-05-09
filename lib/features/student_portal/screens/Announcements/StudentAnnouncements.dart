@@ -43,9 +43,16 @@ class StudentAnnouncements extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
-          Text("Announcements"),
+          SizedBox(height: 8),
+          const Text("Global Announcements",
+          style:  TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+          ),
+          ),
+          SizedBox(height: 4),
           Container(
-            height: Get.height * 0.770,
+            height: Get.height * 0.74,
             child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance.collection('announcements')
                   .snapshots(),
@@ -73,10 +80,11 @@ class StudentAnnouncements extends StatelessWidget {
 
                     return Container(
                       margin: EdgeInsets.symmetric(vertical: 8),
+                      padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(8),
-                        color: Colors.amberAccent.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(16),
+                        color: Colors.red.withOpacity(0.1),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,23 +93,29 @@ class StudentAnnouncements extends StatelessWidget {
                             announcement.title,
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontSize: 20,
+                              fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           Divider(),
-                          SizedBox(height: 8),
+                          SizedBox(height: 4),
                           Text(
                             announcement.description,
                             style: TextStyle(fontSize: 16),
                           ),
-                          SizedBox(height: 8),
+                          SizedBox(height: 4),
                           Divider(),
                           Text(
-                            "Announcement by ${announcement.teacherName}",
-                            style: TextStyle(fontSize: 14),
+                            "Announcement by ",
+                            style: TextStyle(fontSize: 12,
+                                fontWeight: FontWeight.bold),
                           ),
-                          SizedBox(height: 8),
+                          Text(
+                            announcement.teacherName,
+                            style: TextStyle(fontSize: 10
+                                ),
+                          ),
+                          SizedBox(height: 4),
                           Text(
                             announcement.date.toString(),
                             style: TextStyle(fontSize: 14),

@@ -18,7 +18,25 @@ class ClassroomScreen extends StatelessWidget {
     print(classroomController.classrooms.value.toString());
     return Scaffold(
       appBar: AppBar(
-        title: Text('Classrooms'),
+
+        title: Text('Joined Classrooms'),
+        centerTitle: true,
+        flexibleSpace: Container(
+          padding: EdgeInsets.all(16.0),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Color(0xffF8B195),
+                Color(0xffC06C84),
+                Color(0xff6C5B7B),
+                Color(0xffF67280),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
+
       ),
       body: Obx(() => ListView.builder(
             itemCount: classroomController.classrooms.length,

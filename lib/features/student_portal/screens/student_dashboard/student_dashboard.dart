@@ -5,11 +5,13 @@ import 'package:gamed/features/student_portal/screens/student_dashboard/profile_
 import 'package:gamed/features/student_portal/screens/student_dashboard/student_welcome_section.dart';
 import 'package:gamed/repositories/authentication_repository/authentication_repository.dart';
 import 'package:get/get.dart';
-
 import '../../controllers/StudentController.dart';
 import '../bottom_navbar.dart';
 import 'badges_section.dart';
 import 'dashboard_grid.dart';
+
+
+
 
 class StudentDashboard extends StatelessWidget {
   const StudentDashboard({Key? key}) : super(key: key);
@@ -34,6 +36,7 @@ class StudentDashboard extends StatelessWidget {
         icon: Icons.leaderboard,
         color: Color(0xffF67280),
         onPressed: () {
+         studentController.selectedIndex.value=2;
           // TODO: Implement action for Show Leaderboard item
         },
       ),
@@ -78,21 +81,61 @@ class StudentDashboard extends StatelessWidget {
         //       },
         //   ),
         // ),
+      appBar: AppBar(
+        flexibleSpace: Container(
+            padding: EdgeInsets.all(16.0),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Color(0xffF8B195),
+                  Color(0xffC06C84),
+                  Color(0xff6C5B7B),
+                  Color(0xffF67280),
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+          ),
+        leadingWidth: 51,
+        primary: true,
+        centerTitle: true,
+        leading:Padding(
+          padding: const EdgeInsets.only(left:8.0),
+          child: CircleAvatar(
+            foregroundImage:  NetworkImage(
+              getProfileImageUrl(),
+            ),
+          ),
+        ),
+        title: Text("Student Dashboard"),
+      )
+          ,
         body: SingleChildScrollView(
           child: Container(
             child: Column(
               children: [
+
+                SizedBox(
+                  height: 6,
+                ),
                 StudentWelcomeSection(name: "Hasnain", imageUrl: "asdf"),
+                SizedBox(
+                  height: 5,
+                ),
                 SizedBox(
                   height: 300,
                   child: DashboardGrid(
                     items: items,
                   ),
                 ),
-                BadgeSection(badgesEarned: [1]),
+
+
               ],
             ),
           ),
         ));
   }
+
+  getProfileImageUrl() => AuthenticationRepository.instance.currentUser['profilePictureUrl'];
 }

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../../../repositories/authentication_repository/authentication_repository.dart';
+
 class TeacherProfileScreen extends StatefulWidget {
   @override
   _TeacherProfileScreenState createState() => _TeacherProfileScreenState();
@@ -46,55 +48,85 @@ class _TeacherProfileScreenState extends State<TeacherProfileScreen> {
         title: Text('Teacher Profile'),
       ),
       body: Container(
-      padding: EdgeInsets.all(10),
+      padding: EdgeInsets.all(20),
         alignment: Alignment.topCenter,
         child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CircleAvatar(
-                radius: 50.0,
-                backgroundImage: NetworkImage(teacherData['profilePictureUrl']),
-              ),
-              SizedBox(height: 20.0),
-              Text(
-                teacherData['userData']['fullName']??"",
-                style: TextStyle(
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 15.0),
-              Text("Email",
-              style: TextStyle(
-                  fontSize: 14.0,
-                  fontWeight: FontWeight.bold,
-              ),
-              ),
-              SizedBox(height:5.0),
+          child: Card(
+            elevation: 4,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircleAvatar(
+                    radius: 50.0,
+                    backgroundImage: NetworkImage(teacherData['profilePictureUrl']),
+                  ),
+                  SizedBox(height: 20.0),
+                  Text(
+                    teacherData['userData']['fullName']??"",
+                    style: TextStyle(
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 15.0),
+                  Text("Email",
+                  style: TextStyle(
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.bold,
+                  ),
+                  ),
+                  SizedBox(height:5.0),
 
-              Text(
-                teacherData['email'],
-                style: TextStyle(
-                  fontSize: 16.0,
-                ),
+                  Text(
+                    teacherData['email'],
+                    style: TextStyle(
+                      fontSize: 16.0,
+                    ),
+                  ),
+                  SizedBox(height: 16.0),
+                  Text("Phone Number",
+                    style: TextStyle(
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 8.0),
+                  Text(
+                    teacherData['userData']['phoneNo'],
+                    style: TextStyle(
+                      fontSize: 16.0,
+                    ),
+                  ),
+                  ElevatedButton(
+                    style: ButtonStyle(
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(Icons.logout,
+                          color: Colors.red,
+                          size: 22,
+                        ),
+                        Text("Logout",
+                          style: TextStyle(
+                            fontSize: 10,
+                          ),
+                        ),
+                      ],
+                    ),
+                    onPressed: () async {
+                      await AuthenticationRepository.instance.logout();
+                    },
+                  ),
+                ],
+
               ),
-              SizedBox(height: 16.0),
-              Text("Phone Number",
-                style: TextStyle(
-                  fontSize: 14.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 8.0),
-              Text(
-                teacherData['userData']['phoneNo'],
-                style: TextStyle(
-                  fontSize: 16.0,
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),

@@ -29,7 +29,7 @@ const String tOnBoardingCounter2 = "2/3";
 const String tOnBoardingCounter3 = "3/3";
 
 // -- Welcome Screen Text
-const String tWelcomeTitle = "Welcome to Gamed!";
+const String tWelcomeTitle = "Welcome to GamEd!";
 const String tWelcomeSubTitle =
     "Welcome to GamEd, the app that turns achieving your goals into a game! "
     "Let's start playing and see how far you can go!";

@@ -21,28 +21,28 @@ class TeacherDashboardScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Teacher Dashboard'),
-        actions: [
-          ElevatedButton(
-            style: ButtonStyle(
-            ),
-            child: Row(
-              children: [
-                Icon(Icons.logout,
-                color: Colors.red,
-                size: 22,
-                ),
-                Text("Logout",
-                  style: TextStyle(
-                    fontSize: 10,
-                  ),
-                ),
+          centerTitle: true,
+        flexibleSpace:Container(
+          padding: EdgeInsets.all(16.0),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Color(0xff334D50),
+                Color(0xff45B69C),
+                Color(0xffEFC94C),
+                Color(0xffAB3E5B),
               ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
             ),
-            onPressed: () async {
-              await AuthenticationRepository.instance.logout();
-            },
           ),
-        ],
+        )
+
+
+
+
+
+
       ),
       bottomNavigationBar:  BottomNavBar(
 
@@ -55,13 +55,91 @@ class TeacherDashboardScreen extends StatelessWidget {
             Get.off(()=>CreateAnnouncementScreen());
           }
           else if(index==2){
-            Get.to(()=>LeaderboardScreen(selectedindex:2,));
+            Get.to(()=>LeaderboardScreen(
+              appBar: AppBar(
+                title: Text('Leaderboard'),
+                flexibleSpace: Container(
+                  padding: EdgeInsets.all(16.0),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Color(0xff334D50),
+                        Color(0xff45B69C),
+                        Color(0xffEFC94C),
+                        Color(0xffAB3E5B),
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                  ),
+                )
+              ),
+              selectedindex:2,bottomNavbarItems: [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.dashboard),
+                label: 'Classroom',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.announcement),
+                label: 'Announcement',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.leaderboard),
+                label: "Leaderboard",
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person),
+                label: 'Profile',
+              ),
+
+            ],isTeacherPortal: true,));
           }
           else if(index==3){
-            Get.to(()=> TeacherProfileScreen());
+            Get.to(()=> ProfileScreen(
+              appBar: AppBar(
+                title: Text('Profile'),
+                flexibleSpace: Container(
+                  padding: EdgeInsets.all(16.0),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Color(0xff334D50),
+                        Color(0xff45B69C),
+                        Color(0xffEFC94C),
+                        Color(0xffAB3E5B),
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                  ),
+                )
+              ),
+              selectedindex: 3,
+              isTeacherPortal: true,
+              bottomNavbarItems: [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.dashboard),
+                  label: 'Classroom',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.announcement),
+                  label: 'Announcement',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.leaderboard),
+                  label: "Leaderboard",
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.person),
+                  label: 'Profile',
+                ),
+              ],
+
+            ));
             // Get.to(()=>ProfilePictureWidget());
           }
         },
+
         items: [ BottomNavigationBarItem(
           icon: Icon(Icons.dashboard),
           label: 'Classroom',
@@ -79,51 +157,92 @@ class TeacherDashboardScreen extends StatelessWidget {
             label: 'Profile',
           ),],
       ),
-      body: Container(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _buildGreetingSection(currentUser['email'],currentUser['userData']['fullName']),
-            SizedBox(height: 16.0),
-            _buildFeatureCard(
-              icon: Icons.class_,
-              title: 'Create Classroom',
-              onTap: () {
-                // Handle create classroom action
-                Get.off(()=>CreateClassroomScreen());
-              },
-            ),
-            SizedBox(height: 16.0),
-            _buildFeatureCard(
-              icon: Icons.view_list,
-              title: 'View Classrooms',
-              onTap: () {
-                // Handle view classrooms action
-              Get.off(()=>ViewClassroomScreen() );
-
-              },
-            ),
-            SizedBox(height: 16.0),
-            _buildFeatureCard(
-              icon: Icons.emoji_events,
-              title: 'View Leaderboard',
-              onTap: () {
-                // Handle view leaderboard action
-                Get.to(()=>LeaderboardScreen(selectedindex: 2,));
-              },
-            ),
-
+      body: SingleChildScrollView(
+        child: Container(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                  margin: EdgeInsets.only(top: 16.0, bottom: 15.0),
+                  child:  _buildGreetingSection(currentUser['email'],currentUser['userData']['fullName'])),
               SizedBox(height: 16.0),
-            _buildFeatureCard(
-              icon: Icons.announcement,
-              title: 'Create Announcement',
-              onTap: () {
-                Get.off(()=>CreateAnnouncementScreen());
-                // Handle create announcement action
-              },
-            ),
-          ],
+              _buildFeatureCard(
+                icon: Icons.class_,
+                title: 'Create Classroom',
+                onTap: () {
+                  // Handle create classroom action
+                  Get.to(()=>CreateClassroomScreen());
+                },
+              ),
+              SizedBox(height: 16.0),
+              _buildFeatureCard(
+                icon: Icons.view_list,
+                title: 'View Classrooms',
+                onTap: () {
+                  // Handle view classrooms action
+                Get.to(()=>ViewClassroomScreen() );
+
+                },
+              ),
+              SizedBox(height: 16.0),
+              _buildFeatureCard(
+                icon: Icons.emoji_events,
+                title: 'View Leaderboard',
+                onTap: () {
+                  // Handle view leaderboard action
+                  Get.to(()=>LeaderboardScreen(
+                    appBar: AppBar(
+                        title: Text('Leaderboard'),
+                        flexibleSpace: Container(
+                          padding: EdgeInsets.all(16.0),
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [
+                                Color(0xff334D50),
+                                Color(0xff45B69C),
+                                Color(0xffEFC94C),
+                                Color(0xffAB3E5B),
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                          ),
+                        )
+                    ),
+                    selectedindex:2,bottomNavbarItems: [
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.dashboard),
+                      label: 'Classroom',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.announcement),
+                      label: 'Announcement',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.leaderboard),
+                      label: "Leaderboard",
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.person),
+                      label: 'Profile',
+                    ),
+
+                  ],isTeacherPortal: true,));
+                },
+              ),
+
+                SizedBox(height: 16.0),
+              _buildFeatureCard(
+                icon: Icons.announcement,
+                title: 'Create Announcement',
+                onTap: () {
+                  Get.to(()=>CreateAnnouncementScreen());
+                  // Handle create announcement action
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -170,41 +289,83 @@ class TeacherDashboardScreen extends StatelessWidget {
 
 
 Widget _buildGreetingSection(String userEmail, String name) {
-  return Row(
-    crossAxisAlignment: CrossAxisAlignment.center,
-    children: [
-      ProfilePictureWidget(userId:userEmail),
-      // CircleAvatar(
-      //   radius: 40.0,
-      //   backgroundImage: AssetImage(imageAddress),
-      // ),
-      SizedBox(width: 16.0),
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Welcome, ',
-            style: TextStyle(
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold,
+  return Card(
+      elevation: 4.0,
+      shape: RoundedRectangleBorder(
+
+      borderRadius: BorderRadius.circular(10.0),
+  ),
+  child:Container(
+    padding: EdgeInsets.symmetric(vertical:16.0),
+    child: Row(
+
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        SizedBox(
+            width: 80,
+            child: Padding(
+
+              padding: const EdgeInsets.only(left:8.0),
+              child: ProfilePictureWidget(userId:userEmail),
+            )),
+        // CircleAvatar(
+        //   radius: 40.0,
+        //   backgroundImage: AssetImage(imageAddress),
+        // ),
+        SizedBox(width: 10.0),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Welcome, ',
+              style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-          Text(
-            name,
-            style: TextStyle(
-              fontSize: 22.0,
-              fontWeight: FontWeight.bold,
+            SizedBox(height: 6.0),
+            SizedBox(
+              width: 195.0,
+              child: Row(
+                children: [
+                  Flexible(
+                    child: Text(
+                     name,
+                      style: TextStyle(
+                        color: Colors.grey[600],
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
-      ),
-      Spacer(),
-      Icon(
-        Icons.notifications,
-        size: 30.0,
-      ),
-    ],
-  );
+            SizedBox(height: 4.0),
+            SizedBox(
+              width: 195.0,
+              child: Row(
+
+                children: [
+                  Flexible(
+                    child: Text(
+                     userEmail,
+                      style: TextStyle(
+                        color: Colors.grey[600],
+                        fontSize: 12.0,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+
+      ],
+    ),
+  ));
 }
 
 

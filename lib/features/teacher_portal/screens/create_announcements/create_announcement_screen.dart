@@ -24,6 +24,22 @@ class _CreateAnnouncementScreenState extends State<CreateAnnouncementScreen> {
       appBar: AppBar(
         centerTitle: true,
         title: Text('Global Announcements'),
+          flexibleSpace:Container(
+            padding: EdgeInsets.all(16.0),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Color(0xff334D50),
+                  Color(0xff45B69C),
+                  Color(0xffEFC94C),
+                  Color(0xffAB3E5B),
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+          )
+
       ),
       bottomNavigationBar: BottomNavBar(
         selectedIndex: 1,
@@ -34,8 +50,43 @@ class _CreateAnnouncementScreenState extends State<CreateAnnouncementScreen> {
             Get.off(() => CreateAnnouncementScreen());
           } else if (index == 2) {
             Get.off(() => LeaderboardScreen(
-                  selectedindex: 2,
-                ));
+              appBar: AppBar(
+                  title: Text('Leaderboard'),
+                  flexibleSpace: Container(
+                    padding: EdgeInsets.all(16.0),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Color(0xff334D50),
+                          Color(0xff45B69C),
+                          Color(0xffEFC94C),
+                          Color(0xffAB3E5B),
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                    ),
+                  )
+              ),
+              selectedindex:2,bottomNavbarItems: [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.dashboard),
+                label: 'Classroom',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.announcement),
+                label: 'Announcement',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.leaderboard),
+                label: "Leaderboard",
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person),
+                label: 'Profile',
+              ),
+
+            ],isTeacherPortal: true,));
           } else if (index == 3) {
             // Get.to(()=>ProfilePictureWidget());
           }
@@ -112,6 +163,7 @@ class _CreateAnnouncementScreenState extends State<CreateAnnouncementScreen> {
                         creator: data['creator'] ?? '',
                         text: data['text'] ?? '',
                         timestamp: timestamp.toLocal(),
+                        isRead:data['isRead'] ?? false,
                       );
 
                       // Display the announcement in a ListTile or custom widget
@@ -204,6 +256,7 @@ class _CreateAnnouncementScreenState extends State<CreateAnnouncementScreen> {
           'text': announcementText,
           'creator': AuthenticationRepository.instance.currentUser['email'],
           'timestamp': FieldValue.serverTimestamp(),
+          'isRead': false,
         });
 
         // Show a success message or perform any other actions
@@ -239,12 +292,14 @@ class Announcement {
   final String heading;
   final String creator;
   final DateTime timestamp;
+  bool isRead;
 
   Announcement({
     required this.heading,
     required this.creator,
     required this.text,
     required this.timestamp,
+    this.isRead = false,
   });
 
   String get formattedDate {

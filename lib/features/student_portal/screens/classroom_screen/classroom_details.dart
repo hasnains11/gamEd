@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:external_app_launcher/external_app_launcher.dart';
 
 import '../../controllers/ClassroomController.dart';
 import '../../model/Classroom.dart';
@@ -56,22 +57,26 @@ class _ClassroomDetailsState extends State<ClassroomDetails> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.classroom.name),
-        actions: [
-          ElevatedButton(
-            onPressed: () async {
-              // Call the leaveClassroom function here
-              await widget.classroomController.leaveClassroom(widget.classroom.id);
-              Navigator.pop(context);
-              },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
-              foregroundColor: Colors.white,
+        title: Flexible(child: Text(widget.classroom.name,style: TextStyle(fontSize: 16),)),
+        centerTitle: true,
+        flexibleSpace: Container(
+          padding: EdgeInsets.all(16.0),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Color(0xffF8B195),
+                Color(0xffC06C84),
+                Color(0xff6C5B7B),
+                Color(0xffF67280),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
             ),
-            child: Text('Leave Classroom'),
-          )
+          ),
+        ),
 
-        ],
+
+
       ),
       body: ListView(
         children: [
@@ -123,6 +128,21 @@ class _ClassroomDetailsState extends State<ClassroomDetails> {
           ),
 
           _buildStartLearningButton(),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: ElevatedButton(
+              onPressed: () async {
+                // Call the leaveClassroom function here
+                await widget.classroomController.leaveClassroom(widget.classroom.id);
+                Navigator.pop(context);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                foregroundColor: Colors.white,
+              ),
+              child: Text('Leave Classroom'),
+            ),
+          )
         ],
       ),
     );
@@ -217,6 +237,10 @@ class _ClassroomDetailsState extends State<ClassroomDetails> {
       child: ElevatedButton(
         onPressed: () {
           // Implement the logic for starting the learning process
+          LaunchApp.openApp(
+              androidPackageName: 'com.HasnainAJ.LearningProgram',
+              openStore:false
+          );
         },
         child: Text(
           'Start Learning',

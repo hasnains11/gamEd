@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class BadgeSection extends StatelessWidget {
   final List<int> badgesEarned;
-  final List<String> allBadges = [  "Hello, World!",  "Syntax Master", "Variable Ninja",
+  final List<String> allBadges = [ "Hello, World!",  "Syntax Master", "Variable Ninja",
     "Function Aficionado",  "Conditional Champion",  "Looping Legend",]
   ;
 
@@ -19,7 +19,7 @@ class BadgeSection extends StatelessWidget {
             'Badges Earned',
             style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: 8.0),
+          SizedBox(height: 10.0),
           Wrap(
             spacing: 8.0,
             runSpacing: 8.0,

@@ -16,7 +16,24 @@ class IndexPage extends StatefulWidget {
   static List<Widget> _widgetOptions = <Widget>[
     StudentDashboard(),
     StudentAnnouncements(),
-    LeaderboardScreen(),
+    LeaderboardScreen(appBar: AppBar(
+      title: Text('Leaderboard'),
+      flexibleSpace: Container(
+        padding: EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Color(0xffF8B195),
+              Color(0xffC06C84),
+              Color(0xff6C5B7B),
+              Color(0xffF67280),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+      ),
+    ),),
     ProfileScreen(),
     AchievementScreen(),
     StudentProgressScreen(),
@@ -34,13 +51,7 @@ class _IndexPageState extends State<IndexPage> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      appBar: AppBar(actions: [
-        ElevatedButton(
-            onPressed: () async {
-              await AuthenticationRepository.instance.logout();
-            },
-            child: const Text("Logout")),
-      ]),
+
       body: Obx(()=>
          Stack(
           children: IndexPage._widgetOptions.asMap().entries.map((entry) {

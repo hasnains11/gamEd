@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:gamed/features/student_portal/screens/student_dashboard/badges_section.dart';
+import 'package:gamed/repositories/authentication_repository/authentication_repository.dart';
+import 'package:pie_chart/pie_chart.dart';
 
 class StudentProgressScreen extends StatefulWidget {
   const StudentProgressScreen({Key? key}) : super(key: key);
@@ -9,99 +13,139 @@ class StudentProgressScreen extends StatefulWidget {
 }
 
 class _StudentProgressScreenState extends State<StudentProgressScreen> {
-  final List<Course> _courses = [
-    Course(
-        name: 'Programming Fundamentals',
-        progress: 75,
-        assignmentsCompleted: 10,
-        totalAssignments: 15),
-    Course(
-        name: 'Javascript',
-        progress: 60,
-        assignmentsCompleted: 8,
-        totalAssignments: 12),
-    Course(
-        name: 'C#',
-        progress: 90,
-        assignmentsCompleted: 12,
-        totalAssignments: 12),
-  ];
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  List<Map<String, dynamic>> _participants = [];
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    getParticipants();
+  }
+
+  Future<void> getParticipants() async {
+    try {
+      String userId = _auth.currentUser!.uid;
+      String name =AuthenticationRepository.instance.currentUser!['userData']['fullName'];
+      String email = _auth.currentUser!.email ?? '';
+
+      setState(() {
+        _participants = [
+          {
+            'name': name,
+            'email': email,
+            'score': '0', // Set an initial score value
+          }
+        ];
+        _isLoading = false;
+      });
+
+      FirebaseFirestore.instance
+          .collection('scores')
+          .doc(email)
+          .snapshots()
+          .listen((DocumentSnapshot snapshot) {
+        if (snapshot.exists) {
+          Map<String, dynamic> data =
+          snapshot.data() as Map<String, dynamic>;
+          setState(() {
+            _participants[0]['score'] = data['score'];
+          });
+        }
+      });
+    } catch (e) {
+      print(e.toString());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Student Progress'),
+        centerTitle: true,
+        flexibleSpace: Container(
+          padding: EdgeInsets.all(16.0),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Color(0xffF8B195),
+                Color(0xffC06C84),
+                Color(0xff6C5B7B),
+                Color(0xffF67280),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
       ),
-      body: ListView.builder(
-        itemCount: _courses.length,
-        itemBuilder: (BuildContext context, int index) {
-          final course = _courses[index];
-          return Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      course.name,
-                      style: const
-                      TextStyle(fontSize: 18,
-                        fontWeight: FontWeight.bold,),
-                    ),
-                    const SizedBox(height: 5),
-
-                    Row(
-                      children: [
-                        const Text('Progress: '),
-
-                        Text(
-                          '${course.progress}%',
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    LinearPercentIndicator(
-                      percent: course.progress.toDouble()/100,
-                      animation: true,
-                      lineHeight: 20, // the height of the progress bar
-                      // progressColor: Colors.green.withOpacity(0.5),
-                      linearGradient: LinearGradient(colors: [Colors.green.withOpacity(0.9),Colors.red.withOpacity(0.4),Colors.purple.withOpacity(0.4)])    ,
-                      barRadius: Radius.circular(12),// the color of the progress bar
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        const Text('Assignments Completed: '),
-                        Text(
-                          '${course.assignmentsCompleted}/${course.totalAssignments}',
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                  ],
+      body:  Container(
+        color: Colors.grey[200],
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const SizedBox(height: 10),
+              Text(
+                _participants[0]['name']??"",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-            ),
-          );
-        },
+              const SizedBox(height: 8),
+              Text(
+                _participants[0]['email']??"",
+                style: TextStyle(
+                  fontSize: 15,
+                ),
+              ),
+              const SizedBox(height: 10),
+              PieChart(
+                dataMap: {
+                  'Total':100.0 -
+                      double.parse(_participants[0]['score'].toString()??"0"),
+                  'Score': double.parse(_participants[0]['score'].toString()??"0"),
+
+                },
+                chartRadius: MediaQuery.of(context).size.width / 2,
+                legendOptions: const LegendOptions(
+                  showLegendsInRow: false,
+                  legendPosition: LegendPosition.right,
+                  legendTextStyle: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                initialAngleInDegree: 0,
+                chartType: ChartType.disc,
+                chartValuesOptions: ChartValuesOptions(
+                  showChartValues: false,
+                  showChartValuesInPercentage: true,
+                  showChartValuesOutside: false,
+                  decimalPlaces: 0,
+                  chartValueStyle: TextStyle(
+                    fontSize: 24,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 11),
+              Text(
+                'Your Score: ${_participants[0]['score']??"0"}/100',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Divider(),
+              BadgeSection(badgesEarned: [0],),
+
+            ],
+          ),
+        ),
       ),
     );
   }
-}
-
-class Course {
-  final String name;
-  final int progress;
-  final int assignmentsCompleted;
-  final int totalAssignments;
-
-  const Course(
-      {required this.name,
-        required this.progress,
-        required this.assignmentsCompleted,
-        required this.totalAssignments});
 }

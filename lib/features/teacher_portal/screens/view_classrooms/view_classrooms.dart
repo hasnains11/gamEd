@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:gamed/repositories/authentication_repository/authentication_repository.dart';
 import 'package:get/get.dart';
 
 import '../../../student_portal/screens/bottom_navbar.dart';
@@ -52,7 +53,7 @@ class ViewClassroomScreen extends StatelessWidget {
           ),],
       ),
       body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('classrooms').snapshots(),
+        stream: FirebaseFirestore.instance.collection('classrooms').where("teacherEmail",isEqualTo: AuthenticationRepository.instance.firebaseUser.value!.email).snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             List<DocumentSnapshot> classrooms = snapshot.data!.docs;

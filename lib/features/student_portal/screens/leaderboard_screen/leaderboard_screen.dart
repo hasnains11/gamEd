@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:gamed/features/student_portal/screens/user_profile/student_profile.dart';
 import 'package:get/get.dart';
 
 import '../../../teacher_portal/screens/create_announcements/create_announcement_screen.dart';
@@ -8,10 +9,13 @@ import '../bottom_navbar.dart';
 
 class LeaderboardScreen extends StatefulWidget {
   int? selectedindex;
+  final bool? isTeacherPortal;
+  final List<BottomNavigationBarItem>? bottomNavbarItems;
+  final AppBar? appBar;
   @override
   State<LeaderboardScreen> createState() => _LeaderboardScreenState();
 
-  LeaderboardScreen({Key? key,this.selectedindex}) : super(key: key);
+  LeaderboardScreen({Key? key,this.selectedindex,this.bottomNavbarItems,this.isTeacherPortal,this.appBar}) : super(key: key);
 }
 
 class _LeaderboardScreenState extends State<LeaderboardScreen> {
@@ -20,54 +24,37 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
     List<Map<String, dynamic>> participants = [];
 
     try {
-      QuerySnapshot snapshot =
-      await FirebaseFirestore.instance.collection('leaderboard').get();
-      print("snaps lenghth ${snapshot.docs.length}");
-      snapshot.docs.forEach((doc) {
-        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-        participants.add(data);
-      });
-      participants.sort((a, b) => int.parse(b['score']).compareTo(int.parse(a['score'])));
-      print("asfdf $participants");
+      QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+          .instance
+          .collection('scores')
+          .get();
+
+      if (snapshot != null) {
+        print("snaps lenghth ${snapshot.docs.length}");
+        snapshot.docs.forEach((doc) {
+          print("entering snapshots");
+          print(doc.data());
+
+          Map<String, dynamic> data = doc.data();
+          String name = doc.id.split('@')[0]; // Use the document ID as the name
+          int score = data['score'];
+          participants.add({
+            'name': name,
+            'score': score,
+          });
+        });
+
+        participants.sort((a, b) => b['score'].compareTo(a['score']));
+        setState(() {
+          this.participants = participants;
+        });
+      }
     } catch (e) {
       print(e.toString());
     }
-
-   setState(() {
-      this.participants = participants;
-   });
   }
 
 
-
-
-  // getParticipants() async {
-  //   List<Map<String, dynamic>> participants = [];
-  //
-  //   try {
-  //     QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
-  //         .instance
-  //         .collection('leaderboard')
-  //         .orderBy('score', descending: true)
-  //         .get();
-  //
-  //     if (snapshot != null) {
-  //       print("snaps lenghth ${snapshot.docs.length}");
-  //       snapshot.docs.forEach((doc) {
-  //       print("entering snapshots");
-  //         print(doc.data());
-  //
-  //           Map<String, dynamic> data = doc.data();
-  //         participants.add(data);
-  //       });
-  //       setState(() {
-  //         this.participants = participants;
-  //       });
-  //     }
-  //   } catch (e) {
-  //     print(e.toString());
-  //   }
-  // }
 
   @override
   void initState() {
@@ -81,50 +68,30 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    participants.sort((a, b) => int.parse(b['score']).compareTo(int.parse(a['score'])));
-    // participants.sort((a, b) => a['score'].compareTo(b['score']));
-    // print(participants);
-    // print(participants[0]['score']);
-    // print(participants[1]['score']);
-    // print(participants[2]['score']);
-    // print(participants[1]['score']);
+    participants.sort((a, b) => b['score'].compareTo(a['score']));
     print("selected Index ${widget.selectedindex}");
     return Scaffold(
+      appBar:widget.appBar,
       backgroundColor: Colors.grey[200],
-      // bottomNavigationBar:  BottomNavBar(
-      //
-      //   selectedIndex: widget.selectedindex??0,
-      //   onItemTapped: (index){
-      //     if(index==0){
-      //       Get.off(()=>TeacherDashboardScreen());
-      //     }
-      //     else if(index==1){
-      //       Get.off(()=>CreateAnnouncementScreen());
-      //     }
-      //     else if(index==2){
-      //       Get.off(()=>LeaderboardScreen());
-      //     }
-      //     else if(index==3){
-      //       // Get.to(()=>ProfilePictureWidget());
-      //     }
-      //   },
-      //   items: [ BottomNavigationBarItem(
-      //     icon: Icon(Icons.dashboard),
-      //     label: 'Classroom',
-      //   ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.announcement),
-      //       label: 'Announcement',
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.leaderboard),
-      //       label: "Leaderboard",
-      //     ),
-      //     BottomNavigationBarItem(
-      //       icon: Icon(Icons.person),
-      //       label: 'Profile',
-      //     ),],
-      // ),
+      bottomNavigationBar: widget.isTeacherPortal??false ? BottomNavBar(
+
+        selectedIndex: widget.selectedindex??0,
+        onItemTapped: (index){
+          if(index==0){
+            Get.off(()=>TeacherDashboardScreen());
+          }
+          else if(index==1){
+            Get.off(()=>CreateAnnouncementScreen());
+          }
+          else if(index==2){
+
+          }
+          else if(index==3){
+            Get.to(()=>ProfileScreen());
+          }
+        },
+        items: widget.bottomNavbarItems??[],
+      ):null,
       body: Container(
         child: RefreshIndicator(
           onRefresh: () async {
@@ -171,13 +138,7 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          // Text(
-                          //   participants[index + 3]['class'],
-                          //   style: TextStyle(
-                          //     fontSize: 16.0,
-                          //     fontWeight: FontWeight.bold,
-                          //   ),
-                          // ),
+
                           Text(
                             "${participants[index + 3]['score']}",
                             style: TextStyle(
@@ -286,115 +247,3 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
   }
 }
 
-
-
-
-// import 'package:flutter/material.dart';
-//
-// class LeaderboardScreen extends StatelessWidget {
-//   final List<Map<String, dynamic>> participants = [
-//     {"name": "John", "class": "A", "score": 98},
-//     {"name": "Sarah", "class": "B", "score": 95},
-//     {"name": "Michael", "class": "A", "score": 92},
-//     {"name": "Emma", "class": "C", "score": 89},
-//     {"name": "David", "class": "B", "score": 86},
-//     {"name": "Olivia", "class": "C", "score": 83},
-//     {"name": "William", "class": "A", "score": 80},
-//     {"name": "Sophia", "class": "B", "score": 77},
-//     {"name": "James", "class": "C", "score": 74},{"name": "John", "class": "A", "score": 98},
-//     {"name": "Sarah", "class": "B", "score": 95},
-//     {"name": "Michael", "class": "A", "score": 92},
-//     {"name": "Emma", "class": "C", "score": 89},
-//     {"name": "David", "class": "B", "score": 86},
-//     {"name": "Olivia", "class": "C", "score": 83},
-//     {"name": "William", "class": "A", "score": 80},
-//     {"name": "Sophia", "class": "B", "score": 77},
-//     {"name": "James", "class": "C", "score": 74},{"name": "John", "class": "A", "score": 98},
-//     {"name": "Sarah", "class": "B", "score": 95},
-//     {"name": "Michael", "class": "A", "score": 92},
-//     {"name": "Emma", "class": "C", "score": 89},
-//     {"name": "David", "class": "B", "score": 86},
-//     {"name": "Olivia", "class": "C", "score": 83},
-//     {"name": "William", "class": "A", "score": 80},
-//     {"name": "Sophia", "class": "B", "score": 77},
-//     {"name": "James", "class": "C", "score": 74},
-//   ];
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text("Leaderboard"),
-//       ),
-//       body: Column(
-//         children: [
-//           Container(
-//             padding: EdgeInsets.symmetric(vertical: 10.0),
-//             decoration: BoxDecoration(
-//               color: Colors.yellow[100],
-//               border: Border(
-//                 bottom: BorderSide(width: 1.0),
-//               ),
-//             ),
-//             child: Row(
-//               mainAxisAlignment: MainAxisAlignment.spaceAround,
-//               children: [
-//                 _getTopParticipantWidget(0),
-//                 _getTopParticipantWidget(1),
-//                 _getTopParticipantWidget(2),
-//               ],
-//             ),
-//           ),
-//           Expanded(
-//             child: ListView.builder(
-//               itemCount: participants.length - 3,
-//               itemBuilder: (context, index) {
-//                 return Container(
-//                   padding: EdgeInsets.symmetric(vertical: 10.0),
-//                   decoration: BoxDecoration(
-//                     border: Border(
-//                       bottom:
-//                       BorderSide(width: 1.0),
-//                     ),
-//                   ),
-//                   child: Row(
-//                     mainAxisAlignment: MainAxisAlignment.spaceAround,
-//                     children: [
-//                       Text("${index + 4}. ${participants[index + 3]['name']}"),
-//                       Text(participants[index + 3]['class']),
-//                       Text("${participants[index + 3]['score']}"),
-//                     ],
-//                   ),
-//                 );
-//               },
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-//
-//   Widget _getTopParticipantWidget(int index) {
-//     return Column(
-//       children: [
-//         CircleAvatar(
-//           radius: 30.0,
-//           backgroundImage: NetworkImage(
-//               'https://randomuser.me/api/portraits/${index % 2 == 0 ? 'men' : 'women'}/${index + 1}.jpg'),
-//         ),
-//         SizedBox(height: 8.0),
-//         Text(participants[index]['name']),
-//         SizedBox(height: 4.0),
-//         Text(participants[index]['class']),
-//         SizedBox(height: 4.0),
-//         Text(
-//           "${participants[index]['score']}",
-//           style: TextStyle(
-//             fontWeight: FontWeight.bold,
-//             fontSize: 18.0,
-//           ),
-//         ),
-//       ],
-//     );
-//   }
-// }

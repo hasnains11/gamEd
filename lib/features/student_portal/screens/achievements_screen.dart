@@ -58,6 +58,22 @@ class _AchievementScreenState extends State<AchievementScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('My Achievements'),
+        centerTitle: true,
+        flexibleSpace: Container(
+          padding: EdgeInsets.all(16.0),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Color(0xffF8B195),
+                Color(0xffC06C84),
+                Color(0xff6C5B7B),
+                Color(0xffF67280),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
       ),
       body: ListView.builder(
         itemCount: _achievements.length,

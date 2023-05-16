@@ -119,7 +119,7 @@ class StudentDashboard extends StatelessWidget {
                 SizedBox(
                   height: 6,
                 ),
-                StudentWelcomeSection(name: "Hasnain", imageUrl: "asdf"),
+                StudentWelcomeSection(name: AuthenticationRepository.instance.currentUser['userData']['fullName'], imageUrl: "asdf"),
                 SizedBox(
                   height: 5,
                 ),

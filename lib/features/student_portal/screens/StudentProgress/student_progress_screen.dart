@@ -39,7 +39,7 @@ class _StudentProgressScreenState extends State<StudentProgressScreen> {
         Map<String, dynamic> data =
         snapshot.data() as Map<String, dynamic>;
         setState(() {
-          _badges = List<int>.from(data['badges']);
+          _badges = List<int>.from(data['earned']);
         });
       }
     } catch (e) {

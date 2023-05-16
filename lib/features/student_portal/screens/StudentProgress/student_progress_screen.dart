@@ -17,10 +17,34 @@ class _StudentProgressScreenState extends State<StudentProgressScreen> {
   List<Map<String, dynamic>> _participants = [];
   bool _isLoading = true;
 
+  List<int> _badges=[];
+
   @override
   void initState() {
     super.initState();
     getParticipants();
+    getBadges();
+
+  }
+
+  Future<void> getBadges() async {
+    try {
+      String email = _auth.currentUser!.email ?? '';
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance
+          .collection('badges')
+          .doc(email)
+          .get();
+
+      if (snapshot.exists) {
+        Map<String, dynamic> data =
+        snapshot.data() as Map<String, dynamic>;
+        setState(() {
+          _badges = List<int>.from(data['badges']);
+        });
+      }
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   Future<void> getParticipants() async {
@@ -104,7 +128,7 @@ class _StudentProgressScreenState extends State<StudentProgressScreen> {
               const SizedBox(height: 10),
               PieChart(
                 dataMap: {
-                  'Total':100.0 -
+                  'Total':10.0 -
                       double.parse(_participants[0]['score'].toString()??"0"),
                   'Score': double.parse(_participants[0]['score'].toString()??"0"),
 
@@ -133,14 +157,14 @@ class _StudentProgressScreenState extends State<StudentProgressScreen> {
               ),
               const SizedBox(height: 11),
               Text(
-                'Your Score: ${_participants[0]['score']??"0"}/100',
+                'Your Score: ${_participants[0]['score']??"0"}/10',
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               Divider(),
-              BadgeSection(badgesEarned: [0],),
+              BadgeSection(badgesEarned: _badges,),
 
             ],
           ),

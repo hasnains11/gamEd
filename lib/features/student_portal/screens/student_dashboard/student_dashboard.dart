@@ -137,5 +137,5 @@ class StudentDashboard extends StatelessWidget {
         ));
   }
 
-  getProfileImageUrl() => AuthenticationRepository.instance.currentUser['profilePictureUrl'];
+  getProfileImageUrl() => AuthenticationRepository.instance.currentUser['profilePictureUrl']??'https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png';
 }

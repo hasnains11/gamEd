@@ -87,7 +87,52 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
 
           }
           else if(index==3){
-            Get.to(()=>ProfileScreen());
+            widget.isTeacherPortal==null ? Get.to(()=>ProfileScreen()):
+                Get.off(
+                    ()=> ProfileScreen(
+                      appBar: AppBar(
+                          title: Text('Profile'),
+                          centerTitle: true,
+                          flexibleSpace: Container(
+                            padding: EdgeInsets.all(16.0),
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [
+                                  Color(0xff334D50),
+                                  Color(0xff45B69C),
+                                  Color(0xffEFC94C),
+                                  Color(0xffAB3E5B),
+                                ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                            ),
+                          )
+                      ),
+                      selectedindex: 3,
+                      isTeacherPortal: true,
+                      bottomNavbarItems: [
+                        BottomNavigationBarItem(
+                          icon: Icon(Icons.dashboard),
+                          label: 'Classroom',
+                        ),
+                        BottomNavigationBarItem(
+                          icon: Icon(Icons.announcement),
+                          label: 'Announcement',
+                        ),
+                        BottomNavigationBarItem(
+                          icon: Icon(Icons.leaderboard),
+                          label: "Leaderboard",
+                        ),
+                        BottomNavigationBarItem(
+                          icon: Icon(Icons.person),
+                          label: 'Profile',
+                        ),
+                      ],
+
+                    )
+                                  );
+
           }
         },
         items: widget.bottomNavbarItems??[],

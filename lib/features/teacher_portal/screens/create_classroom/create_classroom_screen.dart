@@ -182,12 +182,15 @@ class _CreateClassroomScreenState extends State<CreateClassroomScreen> {
                       onChanged: (value) {
                         setState(() {
                           if (value ?? true) {
-                            _selectedStudents.add(students[index]);
+                            if (!_selectedStudents.contains(students[index])) {
+                              _selectedStudents.add(students[index]);
+                            }
                           } else {
                             _selectedStudents.remove(students[index]);
                           }
                         });
                       },
+
                     );
                   },
                 ),

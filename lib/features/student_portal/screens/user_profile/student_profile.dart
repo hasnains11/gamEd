@@ -29,7 +29,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    sleep(Duration(seconds: 5));
+    // sleep(Duration(seconds: 5));
     _loadUserData();
   }
 
@@ -56,8 +56,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
           SizedBox(height: 15.0),
           CircleAvatar(
             radius: 50.0,
-            backgroundImage: NetworkImage(_userData['profilePictureUrl']),
+            backgroundImage: (_userData.data() != null && _userData.data().containsKey('profilePictureUrl'))
+                ? NetworkImage(_userData.data()['profilePictureUrl'])
+                : NetworkImage('https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png'),
           ),
+
+
           SizedBox(height: 20.0),
           Text(
             _userData['userData']['fullName'],

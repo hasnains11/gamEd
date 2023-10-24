@@ -226,40 +226,44 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       ):widget.appBar,
       body: Container(
-        padding: EdgeInsets.all(20.0),
+        margin: EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Card(
-              elevation: 4,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: Padding(
-                padding: EdgeInsets.all(20.0),
-                child: Column(
-                  children: [
-                    _buildProfileInfo(),
-                    SizedBox(height: 20.0),
-                    _buildCompleteProfileButton(),
-                    ElevatedButton(
-                      onPressed: () async {
-                        // Perform logout functionality here
-                    await AuthenticationRepository.instance.logout();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red, // Set the button background color to red
-                      ),
-                      child: Text(
-                        'Logout',
-                        style: TextStyle(
-                          fontSize: 16.0,
-                          color: Colors.white,
-                        ),
-                      ),
-                    )
-                  ],
+            Expanded(
+              child: SingleChildScrollView(
+                child: Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(20.0),
+                    child: Column(
+                      children: [
+                        _buildProfileInfo(),
+                        SizedBox(height: 20.0),
+                        _buildCompleteProfileButton(),
+                        ElevatedButton(
+                          onPressed: () async {
+                            // Perform logout functionality here
+                        await AuthenticationRepository.instance.logout();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.red, // Set the button background color to red
+                          ),
+                          child: Text(
+                            'Logout',
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              color: Colors.white,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),
